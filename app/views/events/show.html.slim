@@ -1,0 +1,16 @@
+- provide :title, @event.name
+h2 Available Performances
+- @event.performances.each do |performance|
+  div id=dom_id(performance)
+    .row
+      = simple_form_for(:shopping_cart, url: shopping_cart_path, method: :patch) do |f|
+        = f.input :performance_id, as: :hidden, input_html: {name: "performance_id", value: performance.id}
+        .col-md-2
+          h4= performance.start_time.to_date.to_s(:long)
+        .col-md-1
+          .form-group
+            = f.input :ticket_count, label: false, collection: 1..10, selected: 1, input_html: {class: "form-control", name: "ticket_count"}
+        .col-md-3
+          .form-group
+            = f.button :submit, "Add to Cart", class: "btn btn-primary", id: "add-to-cart"
+

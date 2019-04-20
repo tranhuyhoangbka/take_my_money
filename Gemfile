@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.6.0"
+ruby "2.5.3"
 
 gem "active_type", ">= 0.3.2"
 gem "autoprefixer-rails", ">= 5.0.0.1"
@@ -22,6 +22,10 @@ gem "rails", "~> 5.2.2.1"
 gem "sass-rails", "~> 5.0"
 gem "sidekiq", ">= 4.2.0"
 gem "turbolinks", "~> 5"
+gem "simple_form"
+gem "slim-rails"
+gem "devise"
+gem "paranoia", "~> 2.2"
 
 group :production, :staging do
   gem "postmark-rails"
@@ -30,6 +34,7 @@ group :production, :staging do
 end
 
 group :development do
+  gem "pry-rails"
   gem "annotate", ">= 2.5.0"
   gem "awesome_print"
   gem "bcrypt_pbkdf", require: false
@@ -61,9 +66,13 @@ group :development do
   gem "terminal-notifier", require: false
   gem "terminal-notifier-guard", require: false
   gem "xray-rails", ">= 0.1.18"
+  gem "faker"
 end
 
 group :test do
+  gem "faker"
+  gem "database_cleaner"
+  gem "rspec-rails"
   gem "capybara", ">= 2.15"
   gem "launchy"
   gem "minitest-ci", ">= 3.3.0", require: false
@@ -71,4 +80,5 @@ group :test do
   gem "shoulda-context"
   gem "shoulda-matchers", ">= 3.0.1"
   gem "webdrivers"
+  gem "factory_girl_rails", "~> 4.0"
 end
