@@ -1,0 +1,13 @@
+.page-header
+  - if content_for?(:title)
+    h1
+      = content_for(:title)
+    = content_for(:page_subhead)
+  - else
+    h1
+      | Untitled
+    p
+      | Don’t forget to set 
+      code
+        | provide(:title)
+      |  for this view!
