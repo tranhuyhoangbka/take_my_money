@@ -1,0 +1,4 @@
+- provide :title, "Charge result"
+h1 Purchased Successfully!
+h3 Click below link to view order in detail
+= link_to @receipt_url, @receipt_url, target: "_blank" if @receipt_url

@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   # root to: "visitors#index"
   resources :events
   resource :shopping_cart
+  resources :payments
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
