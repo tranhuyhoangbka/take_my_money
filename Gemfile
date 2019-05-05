@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.5.3"
 
 gem "stripe"
+gem 'sprockets', '>= 3.0.0'
+gem 'sprockets-es6'
 gem "active_type", ">= 0.3.2"
 gem "autoprefixer-rails", ">= 5.0.0.1"
 gem "bcrypt", "~> 3.1.7"
