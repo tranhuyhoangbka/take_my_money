@@ -1,28 +1,31 @@
 class PurchasesCart
-  attr_accessor :user, :stripe_token, :purchase_amount, :success, :payment
+  attr_accessor :user, :purchase_amount_cents, :purchase_amount, :success, :payment
 
-  def initialize user:, stripe_token:, purchase_amount_cents:
+  def initialize user: nil, purchase_amount_cents: nil
     @user = user
-    @stripe_token = stripe_token
     @purchase_amount = purchase_amount_cents
     @success = false
+  end
+
+  def run
+    Payment.transaction do
+      update_tickets
+      create_payment
+      purchase
+      calculate_success
+    end
+  end
+
+  def calculate_success
+    @success = payment.succeeded?
   end
 
   def tickets
     @tickets ||= @user.tickets_in_cart
   end
 
-  def run
-    Payment.transaction do
-      purchase_tickets
-      create_payment
-      charge
-      @success = payment.succeeded?
-    end
-  end
-
-  def purchase_tickets
-    tickets.each(&:purchased!)
+  def redirect_on_success_url
+    nil
   end
 
   def create_payment
@@ -32,14 +35,10 @@ class PurchasesCart
 
   def payment_attributes
     {user_id: user.id, price: purchase_amount.to_i,
-      status: "created", reference: Payment.generate_reference,
-      payment_method: "stripe"}
+      status: "created", reference: Payment.generate_reference}
   end
 
-  def charge
-    charge = StripeCharge.new(token: stripe_token, payment: payment).charge
-    payment.update!(
-      status: charge.status, response_id: charge.id,
-      full_response: charge.to_json)
+  def success?
+    success
   end
 end

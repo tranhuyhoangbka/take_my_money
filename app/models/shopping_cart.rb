@@ -29,10 +29,10 @@ class ShoppingCart
   end
 
   def subtotal_for(performance)
-    tickets_by_performance[performance.id].sum(&:price)
+    tickets_by_performance[performance.id].map{|ticket| ticket.price.to_i}.sum
   end
 
   def total_cost
-    tickets.map(&:price).sum
+    tickets.map{|ticket| ticket.price.to_i}.sum
   end
 end

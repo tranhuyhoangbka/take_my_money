@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   resources :events
   resource :shopping_cart
   resources :payments
+  get "paypal/approved", to: "pay_pal_payments#approved"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
