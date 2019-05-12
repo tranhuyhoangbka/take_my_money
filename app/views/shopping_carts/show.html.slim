@@ -19,16 +19,29 @@ h3 Total #{@cart.total_cost}
 - if @cart.tickets.any?
   h2 Checkout
 
-  h3 Credit Card Info
+  h3 Payment Options
 
   = simple_form_for :payment, url: payments_path, class: "form-inline", html: {id: "payment-form"} do |f|
-    = f.input :purchase_amount_cents, as: :hidden, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount_cents"}
-    .form_group
-      = f.input :credit_card_number, label: false, placeholder: "Credit Card #", input_html: {class: "form-control", name: nil, id: "credit_card_number", "data-stripe": "number"}
-    .form_group
-      = f.input :expiration_month, label: false, placeholder: "Month", input_html: {class: "form-control", name: nil, id: "expiration_month", "data-stripe": "exp-month"}
-      = f.input :expiration_year, label: false, placeholder: "Year", input_html: {class: "form-control", name: nil, "data-stripe": "exp-year", id: "expiration_year"}
-      = f.input :cvc, label: false, placeholder: "CVC #", input_html: {class: "form-control", name: nil, id: "cvc", "data-stripe": "cvc"}
 
-    .form_group
-      = f.button :submit, "Purchase Cart", class: "btn btn-default", id: "purchase"
+    .paypal
+      = image_tag "https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", align: "left", style: "margin-right: 7px;"
+      span style="font-size: 11px; font-family: Arial, Verdana"
+        | The safer, easier way to pay
+      = radio_button_tag :payment_type, :paypal, false, class: "payment-type-radio", id: "paypal_radio"
+    .credit_card
+      | Credit Card
+      = radio_button_tag :payment_type, :credit, true, class: "payment-type-radio", id: "credit_radio"
+
+      = f.input :purchase_amount_cents, as: :hidden, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount_cents"}
+
+      #credit-card-info
+        h3 Credit Card Info
+        .form_group
+          = f.input :credit_card_number, label: false, placeholder: "Credit Card #", input_html: {class: "form-control", name: nil, id: "credit_card_number", "data-stripe": "number"}
+        .form_group
+          = f.input :expiration_month, label: false, placeholder: "Month", input_html: {class: "form-control", name: nil, id: "expiration_month", "data-stripe": "exp-month"}
+          = f.input :expiration_year, label: false, placeholder: "Year", input_html: {class: "form-control", name: nil, "data-stripe": "exp-year", id: "expiration_year"}
+          = f.input :cvc, label: false, placeholder: "CVC #", input_html: {class: "form-control", name: nil, id: "cvc", "data-stripe": "cvc"}
+
+      .form_group
+        = f.button :submit, "Purchase Cart", class: "btn btn-default", id: "purchase"
