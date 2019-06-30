@@ -30,7 +30,7 @@ class Payment < ApplicationRecord
   has_many :payment_line_items, dependent: :destroy
   has_many :tickets, through: :payment_line_items, source_type: "Ticket", source: "buyable"
 
-  enum status: {created: 0, succeeded: 1, pending: 2}
+  enum status: {created: 0, succeeded: 1, pending: 2, failed: 3}
 
   def total_cost
     tickets.map(&:price).sum
@@ -40,5 +40,9 @@ class Payment < ApplicationRecord
     tickets.each do |ticket|
       payment_line_items.create!(buyable: ticket, price: ticket.price)
     end
+  end
+
+  def sorted_ticket_ids
+    tickets.map(&:id).sort
   end
 end

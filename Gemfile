@@ -1,8 +1,9 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.5.3"
+ruby "2.6.0"
 
+gem "rollbar"
 gem "paypal-sdk-rest"
 gem "stripe"
 gem 'sprockets', '>= 3.0.0'
@@ -30,6 +31,7 @@ gem "simple_form"
 gem "slim-rails"
 gem "devise"
 gem "paranoia", "~> 2.2"
+gem "delayed_job_active_record"
 
 group :production, :staging do
   gem "postmark-rails"

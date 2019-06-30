@@ -2,15 +2,15 @@ class PaymentsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    payment = Payment.find_by(reference: params[:id])
+    @reference = params[:id]
+    @payment = Payment.find_by(reference: @reference)
     # @receipt_url = JSON.parse(payment.full_response)["receipt_url"] rescue nil
   end
 
   def create
-    workflow = create_workflow(params[:payment_type])
-    workflow.run
+    workflow = run_workflow(params[:payment_type])
     if workflow.success
-      redirect_to workflow.redirect_on_success_url || payment_path(id: workflow.payment.reference)
+      redirect_to workflow.redirect_on_success_url || payment_path(id: @reference || workflow.payment.reference)
     else
       redirect_to shopping_cart_path
     end
@@ -18,7 +18,7 @@ class PaymentsController < ApplicationController
 
   private
 
-  def create_workflow payment_type
+  def run_workflow payment_type
     case payment_type
     when "paypal" then paypal_workflow
     else
@@ -27,17 +27,23 @@ class PaymentsController < ApplicationController
   end
 
   def paypal_workflow
-    PurchasesCartViaPayPal.new(
+    workflow = PurchasesCartViaPayPal.new(
       user: current_user,
-      purchase_amount_cents: params[:purchase_amount_cents]
+      purchase_amount_cents: params[:purchase_amount_cents],
+      expected_ticket_ids: params[:ticket_ids]
     )
+    workflow.run
+    workflow
   end
 
   def stripe_workflow
-    PurchasesCartViaStripe.new(
+    @reference = Payment.generate_reference
+    PurchasesCartJob.perform_later(
       user: current_user,
-      stripe_token: StripeToken.new(**card_params),
-      purchase_amount_cents: params[:purchase_amount_cents]
+      params: card_params,
+      purchase_amount_cents: params[:purchase_amount_cents],
+      expected_ticket_ids: params[:ticket_ids],
+      payment_reference: @reference
     )
   end
 
