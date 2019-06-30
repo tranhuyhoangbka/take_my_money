@@ -2,15 +2,16 @@
 #
 # Table name: tickets
 #
-#  access         :integer
-#  created_at     :datetime         not null
-#  deleted_at     :datetime
-#  id             :bigint(8)        not null, primary key
-#  performance_id :bigint(8)
-#  price          :float
-#  status         :integer
-#  updated_at     :datetime         not null
-#  user_id        :bigint(8)
+#  access            :integer
+#  created_at        :datetime         not null
+#  deleted_at        :datetime
+#  id                :bigint(8)        not null, primary key
+#  payment_reference :string
+#  performance_id    :bigint(8)
+#  price             :float
+#  status            :integer
+#  updated_at        :datetime         not null
+#  user_id           :bigint(8)
 #
 # Indexes
 #

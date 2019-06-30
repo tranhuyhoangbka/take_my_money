@@ -22,4 +22,8 @@ class PurchasesCartViaPayPal < PurchasesCart
     payment.update response_id: pay_pal_payment.response_id
     payment.pending!
   end
+
+  def tickets
+    @tickets ||= @user.tickets_in_cart
+  end
 end
