@@ -8,7 +8,7 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    workflow = run_workflow(params[:payment_type])
+    workflow = run_workflow(params[:payment_type], params[:purchase_type])
     if workflow.success
       redirect_to workflow.redirect_on_success_url || payment_path(id: @reference || workflow.payment.reference)
     else
@@ -18,11 +18,18 @@ class PaymentsController < ApplicationController
 
   private
 
-  def run_workflow payment_type
-    case payment_type
-    when "paypal" then paypal_workflow
-    else
-      stripe_workflow
+  def run_workflow payment_type, purchase_type
+    # case payment_type
+    # when "paypal" then paypal_workflow
+    # else
+    #   stripe_workflow
+    # end
+
+    case purchase_type
+    when "ShoppingCart"
+      payment_type == "paypal" ? paypal_workflow : stripe_workflow
+    when "SubscriptionCart"
+      stripe_subscription_workflow
     end
   end
 
@@ -38,13 +45,26 @@ class PaymentsController < ApplicationController
 
   def stripe_workflow
     @reference = Payment.generate_reference
-    PurchasesCartJob.perform_later(
-      user: current_user,
-      params: card_params,
+    token = StripeToken.new(**card_params)
+    current_user.tickets_in_cart.each do |ticket|
+      ticket.update payment_reference: @reference
+    end
+    purchases_cart_workflow = PurchasesCartViaStripe.new(
+      user: current_user, stripe_token: token,
       purchase_amount_cents: params[:purchase_amount_cents],
       expected_ticket_ids: params[:ticket_ids],
       payment_reference: @reference
     )
+    purchases_cart_workflow.run
+    purchases_cart_workflow
+  end
+
+  def stripe_subscription_workflow
+    token = StripeToken.new(**card_params)
+    workflow = CreatesSubscriptionViaStripe.new(user: current_user, 
+      expected_subscription_id: params[:subscription_ids].split(" "), token: token)
+    workflow.run
+    workflow
   end
 
   def card_params

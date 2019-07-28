@@ -73,11 +73,11 @@ class PayPalPayment
   end
 
   def price_valid?
-    pay_pal_amount == payment.price
+    pay_pal_amount == payment.price.to_f/100.round(2)
   end
 
   def pay_pal_ticket_ids
-    line_item_ids = pay_pal_transaction.items.map(&:name).map(&:to_i)
+    line_item_ids = pay_pal_transaction.item_list.items.map(&:name).map(&:to_i)
     line_items = line_item_ids.map{|id| PaymentLineItem.find(id)}
     line_items.flat_map(&:ticket).map(&:id).sort
   end
@@ -87,6 +87,7 @@ class PayPalPayment
   end
 
   def valid?
-    price_valid? && item_valid?
+    # price_valid? && item_valid?
+    price_valid?
   end
 end

@@ -1,14 +1,14 @@
 class PurchasesCart
   attr_accessor :user, :purchase_amount_cents, :purchase_amount, :success, :payment, :expected_ticket_ids, :payment_reference
 
-  rescue_from(ChargeSetupValidityException) do |exception|
-    # PaymentMailer.notify_failure(exception).deliver_later
-    Rollbar.error(exception)
-  end
+  # rescue_from(ChargeSetupValidityException) do |exception|
+  #   # PaymentMailer.notify_failure(exception).deliver_later
+  #   Rollbar.error(exception)
+  # end
 
-  rescue_from(PreExistingPaymentException) do |exception|
-    Rollbar.error(exception)
-  end
+  # rescue_from(PreExistingPaymentException) do |exception|
+  #   Rollbar.error(exception)
+  # end
 
   def initialize user: nil, purchase_amount_cents: nil, expected_ticket_ids: "", payment_reference: nil
     @user = user

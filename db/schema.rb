@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_19_074655) do
+ActiveRecord::Schema.define(version: 2019_07_28_163636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,34 @@ ActiveRecord::Schema.define(version: 2019_05_19_074655) do
     t.index ["event_id"], name: "index_performances_on_event_id"
   end
 
+  create_table "plans", force: :cascade do |t|
+    t.string "remote_id"
+    t.string "name"
+    t.string "price"
+    t.integer "interval"
+    t.integer "interval_count"
+    t.integer "tickets_allowed"
+    t.string "ticket_category"
+    t.integer "status"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "plan_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "status"
+    t.string "payment_method"
+    t.string "remote_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "tickets", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "performance_id"
@@ -99,6 +127,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_074655) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "stripe_id"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -107,6 +136,8 @@ ActiveRecord::Schema.define(version: 2019_05_19_074655) do
   add_foreign_key "payment_line_items", "payments"
   add_foreign_key "payments", "users"
   add_foreign_key "performances", "events"
+  add_foreign_key "subscriptions", "plans"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "tickets", "performances"
   add_foreign_key "tickets", "users"
 end

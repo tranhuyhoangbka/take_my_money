@@ -35,4 +35,12 @@ class ShoppingCart
   def total_cost
     tickets.map{|ticket| ticket.price.to_i}.sum
   end
+
+  def item_attribute
+    :ticket_ids
+  end
+
+  def item_ids
+    tickets.map(&:id)
+  end
 end
