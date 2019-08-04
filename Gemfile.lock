@@ -1,3 +1,43 @@
+GIT
+  remote: https://github.com/activeadmin/activeadmin.git
+  revision: d0cbaddfd629c3bf532d3ca4d47f2f3860215705
+  specs:
+    activeadmin (2.2.0)
+      arbre (~> 1.2, >= 1.2.1)
+      formtastic (~> 3.1)
+      formtastic_i18n (~> 0.4)
+      inherited_resources (~> 1.7)
+      jquery-rails (~> 4.2)
+      kaminari (~> 1.0, >= 1.0.1)
+      railties (>= 5.0, < 6.1)
+      ransack (~> 2.1, >= 2.1.1)
+      sassc-rails (~> 2.1)
+      sprockets (>= 3.0, < 4.1)
+      sprockets-es6 (~> 0.9, >= 0.9.2)
+
+GIT
+  remote: https://github.com/activeadmin/inherited_resources.git
+  revision: 7ed39c832e866ba9f89f4a197fc65b000e0712dc
+  specs:
+    inherited_resources (1.10.0)
+      actionpack (>= 5.0, < 6.1)
+      has_scope (~> 0.6)
+      railties (>= 5.0, < 6.1)
+      responders (>= 2, < 4)
+
+GIT
+  remote: https://github.com/activerecord-hackery/ransack.git
+  revision: aada89548490f98dd3f1a65574ce20551c72d73c
+  specs:
+    polyamorous (2.1.1)
+      activerecord (>= 5.0)
+    ransack (2.1.1)
+      actionpack (>= 5.0)
+      activerecord (>= 5.0)
+      activesupport (>= 5.0)
+      i18n
+      polyamorous (= 2.1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -24,6 +64,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_admin_theme (1.1.0)
     active_type (1.1.0)
       activerecord (>= 3.2)
     activejob (5.2.2.1)
@@ -31,6 +72,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.2.2.1)
       activesupport (= 5.2.2.1)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.2.2.1)
       activemodel (= 5.2.2.1)
       activesupport (= 5.2.2.1)
@@ -51,6 +96,8 @@ GEM
     annotate (2.7.4)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
+    arbre (1.2.1)
+      activesupport (>= 3.0.0)
     arel (9.0.0)
     ast (2.4.0)
     autoprefixer-rails (9.5.1)
@@ -135,6 +182,12 @@ GEM
     dotenv-rails (2.7.2)
       dotenv (= 2.7.2)
       railties (>= 3.2, < 6.1)
+    draper (3.1.0)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
+      activemodel-serializers-xml (>= 1.0)
+      activesupport (>= 5.0)
+      request_store (>= 1.0)
     ed25519 (1.2.4)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
@@ -155,6 +208,9 @@ GEM
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
     formatador (0.2.5)
+    formtastic (3.1.5)
+      actionpack (>= 3.2.13)
+    formtastic_i18n (0.6.0)
     get_process_mem (0.2.3)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -176,6 +232,9 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
+    has_scope (0.7.2)
+      actionpack (>= 4.1)
+      activesupport (>= 4.1)
     http_parser.rb (0.6.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
@@ -186,6 +245,18 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.2.0)
+    kaminari (1.1.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.1.1)
+      kaminari-activerecord (= 1.1.1)
+      kaminari-core (= 1.1.1)
+    kaminari-actionview (1.1.1)
+      actionview
+      kaminari-core (= 1.1.1)
+    kaminari-activerecord (1.1.1)
+      activerecord
+      kaminari-core (= 1.1.1)
+    kaminari-core (1.1.1)
     kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -300,11 +371,11 @@ GEM
       ffi (~> 1.0)
     redis (4.1.0)
     regexp_parser (1.4.0)
+    request_store (1.4.1)
+      rack (>= 1.4)
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
-    rollbar (2.20.2)
-      multi_json
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
@@ -349,6 +420,12 @@ GEM
     sassc (2.0.1)
       ffi (~> 1.9)
       rake
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     selenium-webdriver (3.141.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2, >= 1.2.2)
@@ -436,7 +513,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_admin_theme
   active_type (>= 0.3.2)
+  activeadmin!
   annotate (>= 2.5.0)
   autoprefixer-rails (>= 5.0.0.1)
   awesome_print
@@ -460,6 +539,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   dotenv-rails (>= 2.0.0)
+  draper (> 3.x)
   ed25519 (~> 1.2)
   factory_girl_rails (~> 4.0)
   faker
@@ -467,6 +547,7 @@ DEPENDENCIES
   guard (>= 2.2.2)
   guard-livereload
   guard-minitest
+  inherited_resources!
   jquery-rails
   launchy
   letter_opener
@@ -487,7 +568,7 @@ DEPENDENCIES
   rack-canonical-host (~> 0.2.3)
   rack-livereload
   rails (~> 5.2.2.1)
-  rollbar
+  ransack!
   rspec-rails
   rubocop (>= 0.67.2)
   rubocop-performance

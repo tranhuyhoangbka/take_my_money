@@ -23,6 +23,17 @@ class TokenHandler {
 }
 
 class CheckoutForm {
+  static cardswipe(data) {
+    new CheckoutForm().cardswipe(data)
+  }
+  
+  cardswipe(data) {
+    this.numberField().val(data.account)
+    this.expiryField().val(`${data.expMonth}/${data.expYear}`)
+    this.cvcField().focus()
+  }
+
+
   form() {return $("#payment-form")}
   validFields() {return this.form().find(".valid-field")}
   numberField() {return this.form().find("#credit_card_number")}
@@ -147,5 +158,17 @@ class PaymentFormHandler {
 }
 
 $(() => {
-  new PaymentFormHandler()
+  if ($("#admin_credit_card_info").size() > 0) {
+    $.cardswipe({
+      firstLineOnly: false,
+      success: CheckoutForm.cardswipe,
+      parsers: ["visa", "amex", "mastercard", "discover", "generic"],
+      debug: false,
+    })
+  }
+
+  if ($(".credit-card-form").size() > 0) {
+    return new PaymentFormHandler()
+  }
+  return null;
 })
