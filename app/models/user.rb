@@ -10,6 +10,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  stripe_id              :string
 #  updated_at             :datetime         not null
 #
 # Indexes
@@ -26,8 +27,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :tickets, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def tickets_in_cart
     tickets.waiting.all.to_a
+  end
+
+  def subscriptions_in_cart
+    subscriptions.waiting.all.to_a
   end
 end

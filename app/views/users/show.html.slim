@@ -1,0 +1,30 @@
+h2 User Profile
+
+h3 User Subscriptions
+
+table.table.table-stripped
+  thead
+    tr
+      th Plan name
+      th price
+      th Period
+      th Start date
+      th End date
+      th Payment method
+      th Status
+      th
+      th
+  tbody
+    - current_user.subscriptions.includes(:plan).each do |subscription|
+      tr
+        td=subscription.plan.name
+        td=subscription.plan.price
+        td=subscription.plan.interval
+        td=l subscription.start_date
+        td=l subscription.end_date
+        td=subscription.payment_method
+        td=subscription.status
+        td= button_to "Cancel", subscription_path(subscription), method: :delete, data: {confirm: "Are you sure?"}
+        td= link_to "Change plan", edit_subscription_path(subscription), remote: true, class: "btn btn-default" unless subscription.canceled?
+
+#modal-container
