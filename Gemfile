@@ -32,6 +32,13 @@ gem "devise"
 gem "paranoia", "~> 2.2"
 gem "delayed_job_active_record"
 
+#admintration
+gem "activeadmin", github: "activeadmin/activeadmin"
+gem "active_admin_theme"
+gem "inherited_resources", github: "activeadmin/inherited_resources"
+gem "ransack", github: "activerecord-hackery/ransack"
+gem "draper", "> 3.x"
+
 group :production, :staging do
   gem "postmark-rails"
   gem "unicorn"

@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require jquery.payment
+//= require jquery.cardswipe
 //= require activestorage
 //= require turbolinks
 //= require purchases_cart
