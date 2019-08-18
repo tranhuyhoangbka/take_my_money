@@ -18,6 +18,7 @@ module TakeMyMoney
 
     # Use sidekiq to process Active Jobs (e.g. ActionMailer's deliver_later)
     config.active_job.queue_adapter = :delayed_job
+    config.active_record.belongs_to_required_by_default = false
 
     # Ensure non-standard paths are eager-loaded in production
     # (these paths are also autoloaded in development mode)

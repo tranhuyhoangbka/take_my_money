@@ -31,6 +31,7 @@ gem "slim-rails"
 gem "devise"
 gem "paranoia", "~> 2.2"
 gem "delayed_job_active_record"
+gem "pundit"
 
 #admintration
 gem "activeadmin", github: "activeadmin/activeadmin"

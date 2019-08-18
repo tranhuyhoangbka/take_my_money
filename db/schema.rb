@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_04_085551) do
+ActiveRecord::Schema.define(version: 2019_08_18_100520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(version: 2019_08_04_085551) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "discount_codes", force: :cascade do |t|
+    t.string "code"
+    t.integer "percentage"
+    t.text "description"
+    t.integer "minimum_amount"
+    t.integer "maximum_discount"
+    t.integer "max_uses"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -61,7 +72,12 @@ ActiveRecord::Schema.define(version: 2019_08_04_085551) do
     t.float "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "original_line_item_id"
+    t.bigint "administrator_id"
+    t.integer "refund_status", default: 0
+    t.index ["administrator_id"], name: "index_payment_line_items_on_administrator_id"
     t.index ["buyable_type", "buyable_id"], name: "index_payment_line_items_on_buyable_type_and_buyable_id"
+    t.index ["original_line_item_id"], name: "index_payment_line_items_on_original_line_item_id"
     t.index ["payment_id"], name: "index_payment_line_items_on_payment_id"
   end
 
@@ -75,6 +91,13 @@ ActiveRecord::Schema.define(version: 2019_08_04_085551) do
     t.json "full_response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "original_payment_id"
+    t.bigint "administrator_id"
+    t.bigint "discount_code_id"
+    t.integer "discount"
+    t.index ["administrator_id"], name: "index_payments_on_administrator_id"
+    t.index ["discount_code_id"], name: "index_payments_on_discount_code_id"
+    t.index ["original_payment_id"], name: "index_payments_on_original_payment_id"
     t.index ["user_id"], name: "index_payments_on_user_id"
   end
 
@@ -142,6 +165,7 @@ ActiveRecord::Schema.define(version: 2019_08_04_085551) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.string "stripe_id"
+    t.integer "role"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

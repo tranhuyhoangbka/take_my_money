@@ -8,10 +8,18 @@ class PaymentsController < ApplicationController
   end
 
   def create
+    if params[:discount_code].present?
+      session[:new_discount_code] = params[:discount_code]
+      redirect_to shopping_cart_path
+      return
+    end
+
     workflow = run_workflow(params[:payment_type], params[:purchase_type])
     if workflow.success
+      session.delete(:new_discount_code)
       redirect_to workflow.redirect_on_success_url || payment_path(id: @reference || workflow.payment.reference)
     else
+      session.delete(:new_discount_code)
       redirect_to shopping_cart_path
     end
   end
@@ -37,7 +45,8 @@ class PaymentsController < ApplicationController
     workflow = PurchasesCartViaPayPal.new(
       user: current_user,
       purchase_amount_cents: params[:purchase_amount_cents],
-      expected_ticket_ids: params[:ticket_ids]
+      expected_ticket_ids: params[:ticket_ids],
+      discount_code: session[:new_discount_code]
     )
     workflow.run
     workflow
@@ -45,6 +54,7 @@ class PaymentsController < ApplicationController
 
   def stripe_workflow
     @reference = Payment.generate_reference
+    
     token = StripeToken.new(**card_params)
     pick_user.tickets_in_cart.each do |ticket|
       ticket.update payment_reference: @reference
@@ -53,7 +63,7 @@ class PaymentsController < ApplicationController
       user: pick_user, stripe_token: token,
       purchase_amount_cents: params[:purchase_amount_cents],
       expected_ticket_ids: params[:ticket_ids],
-      payment_reference: @reference
+      payment_reference: @reference, discount_code: session[:new_discount_code]
     )
     purchases_cart_workflow.run
     purchases_cart_workflow
