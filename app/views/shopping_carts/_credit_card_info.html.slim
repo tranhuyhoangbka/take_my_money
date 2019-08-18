@@ -1,5 +1,17 @@
 h3 Payment Options
 
+= simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal" do |f|
+
+  .row
+    .form-group
+      .col-sm-2
+        = label_tag(:discount_code, "Discount Code", class: "control-label")
+      .col-sm-2
+        input.form-control.valid-field(name="discount_code" id="discount_code")
+      .col-sm-3
+        = submit_tag("Apply Code", class: "btn btn-primary", id: "apply_code")
+        = hidden_field_tag(:active_discount_code, "")
+
 = simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal", html: {id: "payment-form"} do |f|
 
   = f.input :purchase_amount_cents, as: :hidden, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount_cents"}
@@ -27,6 +39,7 @@ h3 Payment Options
 
     #credit-card-info
       h3 Credit Card Info
+
       .row
         .form-group
           .col-sm-2

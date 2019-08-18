@@ -15,7 +15,7 @@ table.table.table-stripped
       th
       th
   tbody
-    - current_user.subscriptions.includes(:plan).each do |subscription|
+    - @subscriptions.includes(:plan).each do |subscription|
       tr
         td=subscription.plan.name
         td=subscription.plan.price

@@ -10,6 +10,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  role                   :integer
 #  stripe_id              :string
 #  updated_at             :datetime         not null
 #
@@ -28,6 +29,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :tickets, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+
+  enum role: {user: 0, vip: 1, admin: 2}
 
   def tickets_in_cart
     tickets.waiting.all.to_a
