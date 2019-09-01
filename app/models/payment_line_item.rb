@@ -27,6 +27,7 @@
 
 class PaymentLineItem < ApplicationRecord
   # acts_as_paranoid
+  has_paper_trail
 
   belongs_to :payment
   belongs_to :buyable, polymorphic: true

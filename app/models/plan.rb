@@ -17,6 +17,7 @@
 #
 
 class Plan < ApplicationRecord
+  has_paper_trail
   enum status: {inactive: 0, active: 1}
   enum interval: {day: 0, week: 1, month: 2, year: 3}
 

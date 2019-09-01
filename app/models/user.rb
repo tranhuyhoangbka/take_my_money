@@ -2,6 +2,7 @@
 #
 # Table name: users
 #
+#  authy_id               :string
 #  created_at             :datetime         not null
 #  deleted_at             :datetime
 #  email                  :string           default(""), not null
@@ -24,11 +25,14 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  has_paper_trail ignore: %i(sign_in_count current_sign_in_at last_sign_in_at)
   acts_as_paranoid
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :tickets, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+
+  attr_accessor :cellphone_number
 
   enum role: {user: 0, vip: 1, admin: 2}
 

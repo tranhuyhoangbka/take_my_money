@@ -25,6 +25,7 @@
 #
 
 class Subscription < ApplicationRecord
+  has_paper_trail
   has_one :payment_line_item, as: :buyable
   belongs_to :user
   belongs_to :plan

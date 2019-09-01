@@ -32,6 +32,7 @@
 class Payment < ApplicationRecord
   # acts_as_paranoid
   include HasReference
+  has_paper_trail
 
   belongs_to :user, optional: true
   has_many :payment_line_items, dependent: :destroy

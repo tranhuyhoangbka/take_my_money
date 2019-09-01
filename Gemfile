@@ -3,6 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.6.0"
 
+gem "authy"
+gem "paper_trail"
 gem "paypal-sdk-rest"
 gem "stripe"
 gem 'sprockets', '>= 3.0.0'

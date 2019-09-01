@@ -2,6 +2,7 @@
 #
 # Table name: users
 #
+#  authy_id               :string
 #  created_at             :datetime         not null
 #  deleted_at             :datetime
 #  email                  :string           default(""), not null

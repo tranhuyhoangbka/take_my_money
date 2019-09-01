@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
+  devise_scope :user do
+    post "users/sessions/verify" => "Users::SessionsController"
+  end
   # get 'events/index'
   # get 'events/show'
   mount Sidekiq::Web => "/sidekiq" # monitoring console
@@ -13,6 +19,7 @@ Rails.application.routes.draw do
   resources :plans, only: [:index]
   resource :subscription_cart
   resources :users
+  resource :user_simulation, only: %i(create destroy)
   post "stripe/webhook", to: "stripe_webhook#action"
   resources :subscriptions, only: %i(edit update destroy)
   post "refund", to: "refunds#create", as: :refund
