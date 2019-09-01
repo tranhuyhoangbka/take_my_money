@@ -14,11 +14,22 @@ h3 Payment Options
 
 = simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal", html: {id: "payment-form"} do |f|
 
-  = f.input :purchase_amount_cents, as: :hidden, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount_cents"}
+  - if current_user.admin?
+    .form-group
+      .col-sm-2
+        = label_tag(:purchase_amount, "Purchase Amount Override ($X.XX)", class: "control-label")
+      .col-sm-2
+        = f.input :purchase_amount, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount"}
+  - else
+    = f.input :purchase_amount_cents, as: :hidden, input_html: {value: @cart.total_cost.to_i, name: "purchase_amount_cents"}
   = hidden_field_tag(@cart.item_attribute, @cart.item_ids)
   = hidden_field_tag(:purchase_type, @cart.class.name)
   = hidden_field_tag(:stripe_token, "", id: "spec_stripe_token")
-
+  .clearfix
+  - if current_user.admin?
+    .cash
+      span Cash
+      = radio_button_tag :payment_type, :cash, false, class: "payment-type-radio", id: "paypal_radio"
   .paypal
     = image_tag "https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif", align: "left", style: "margin-right: 7px;"
     span style="font-size: 11px; font-family: Arial, Verdana"

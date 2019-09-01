@@ -106,9 +106,10 @@ class CheckoutForm {
   selectedPaymentType() {return $("input[name=payment_type]:checked").val()}
   creditCardForm() {return $("#credit-card-info")}
   isPayPal() {return this.selectedPaymentType() === "paypal"}
+  isCash() {return this.selectedPaymentType() === "cash"}
   setCreditCardVisibility() {
-    this.creditCardForm().toggleClass("hidden", this.isPayPal())
-    if(this.isPayPal()) {
+    this.creditCardForm().toggleClass("hidden", this.isPayPal() || this.isCash())
+    if(this.isPayPal() || this.isCash()) {
       this.button().prop("disabled")
       this.button().removeClass("disabled")
     }
@@ -135,8 +136,12 @@ class PaymentFormHandler {
 
   initEventHandlers() {
     this.checkoutForm.form().submit(event => {
-      if(!this.checkoutForm.isPayPal()) {
+      if(!this.checkoutForm.isPayPal() || !this.checkoutForm.isCash()) {
         this.handleSubmit(event)
+      }
+
+      if(this.checkoutForm.isCash()) {
+        this.checkoutForm.submit()
       }
     })
 

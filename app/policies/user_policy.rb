@@ -16,4 +16,8 @@ class UserPolicy < ApplicationPolicy
   def update?
     user.admin? || user == record
   end
+
+  def simulate?
+    user.admin? && (user != record)
+  end
 end
