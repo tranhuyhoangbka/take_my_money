@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   devise_scope :user do
     post "users/sessions/verify" => "Users::SessionsController"
   end
+  resource :daily_revenue_report
+  resource :purchase_audit
   # get 'events/index'
   # get 'events/show'
   mount Sidekiq::Web => "/sidekiq" # monitoring console

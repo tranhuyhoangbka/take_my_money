@@ -44,6 +44,10 @@ class Payment < ApplicationRecord
 
   enum status: {created: 0, succeeded: 1, pending: 2, failed: 3, refund_pending: 4, refunded: 5}
 
+  def date
+    created_at.to_s(:sql)
+  end
+
   def total_cost
     tickets.map(&:price).sum
   end
@@ -87,5 +91,22 @@ class Payment < ApplicationRecord
 
   def refund?
     price.negative?
+  end
+
+  class << self
+    def recent_revenues
+      revenues = ActiveRecord::Base.connection.select_all(%{
+        SELECT DATE(created_at) as day, sum(discount) as discounts, sum(price) as price
+        FROM payments
+        WHERE status = 1
+        GROUP BY DATE(created_at)
+        HAVING DATE(created_at) >= '#{1.day.ago.to_date}'
+      }).to_a
+      revenues.map do |r|
+        ticket_count = PaymentLineItem.joins(:ticket).where.not(tickets: {status: "refunded"}).where("DATE(payment_line_items.created_at) = ?", r["day"]).count
+        r.merge! ticket_count: ticket_count
+        DayRevenue.new r
+      end
+    end
   end
 end
