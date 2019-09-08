@@ -31,6 +31,7 @@ class PaymentLineItem < ApplicationRecord
 
   belongs_to :payment
   belongs_to :buyable, polymorphic: true
+  belongs_to :ticket, -> {where(payment_line_items: {buyable_type: 'Ticket'})}, foreign_key: 'buyable_id'
 
   has_many :refunds, class_name: "PaymentLineItem",
     foreign_key: "original_line_item_id"

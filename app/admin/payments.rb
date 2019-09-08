@@ -31,6 +31,17 @@ ActiveAdmin.register Payment do
     active_admin_comments
   end
 
+  csv do
+    column :reference
+    column(:date){|payment| payment.created_at.to_s(:sql)}
+    column(:user_email){|payment| payment.user.email}
+    column(:price)
+    column(:status)
+    column(:payment_method)
+    column(:response_id)
+    column(:discount)
+  end
+
   action_item :refund, only: :show do
     link_to("Refund Payment", refund_path(id: payment.id, type: Payment), method: :post, class: "button", data: {confirm: "Are you sure you want refund this payment?"})
   end

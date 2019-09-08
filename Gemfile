@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.6.0"
 
+gem "whenever", require: false
 gem "authy"
 gem "paper_trail"
 gem "paypal-sdk-rest"
