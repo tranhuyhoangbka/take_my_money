@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.6.0"
 
+gem "tax_cloud"
 gem "whenever", require: false
 gem "authy"
 gem "paper_trail"
@@ -31,10 +32,11 @@ gem "sidekiq", ">= 4.2.0"
 gem "turbolinks", "~> 5"
 gem "simple_form"
 gem "slim-rails"
-gem "devise"
+gem "devise", ">= 4.7.1"
 gem "paranoia", "~> 2.2"
 gem "delayed_job_active_record"
 gem "pundit"
+gem "nokogiri", ">= 1.10.4"
 
 #admintration
 gem "activeadmin", github: "activeadmin/activeadmin"

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :set_paper_trail_whodunnit
+  before_action :set_affiliate
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :simulating_admin_user
@@ -17,6 +18,13 @@ class ApplicationController < ActionController::Base
 
   def simulating_admin_user
     User.find_by(id: session[:admin_id])
+  end
+
+  def set_affiliate
+    tag = params[:tag] || session[:affiliate_tag]
+    workflow = AddsAffiliateToCart.new(user: current_user, tag: tag)
+    workflow.run
+    session[:affiliate_tag] = tag
   end
 
   private

@@ -8,20 +8,20 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    if params[:discount_code].present?
-      session[:new_discount_code] = params[:discount_code]
-      redirect_to shopping_cart_path
-      return
-    end
+    # if params[:discount_code].present?
+    #   session[:new_discount_code] = params[:discount_code]
+    #   redirect_to shopping_cart_path
+    #   return
+    # end
 
     normalize_purchase_amount
 
     workflow = run_workflow(params[:payment_type], params[:purchase_type])
     if workflow.success
-      session.delete(:new_discount_code)
+      # session.delete(:new_discount_code)
       redirect_to workflow.redirect_on_success_url || payment_path(id: @reference || workflow.payment.reference)
     else
-      session.delete(:new_discount_code)
+      # session.delete(:new_discount_code)
       redirect_to shopping_cart_path
     end
   end
@@ -74,7 +74,7 @@ class PaymentsController < ApplicationController
       user: pick_user, stripe_token: token,
       purchase_amount_cents: params[:purchase_amount_cents],
       expected_ticket_ids: params[:ticket_ids],
-      payment_reference: @reference, discount_code: session[:new_discount_code]
+      payment_reference: @reference
     )
     purchases_cart_workflow.run
     purchases_cart_workflow

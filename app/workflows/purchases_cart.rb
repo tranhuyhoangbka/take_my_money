@@ -1,5 +1,5 @@
 class PurchasesCart
-  attr_accessor :user, :purchase_amount_cents, :purchase_amount, :success, :payment, :expected_ticket_ids, :payment_reference, :discount_code
+  attr_accessor :user, :purchase_amount_cents, :purchase_amount, :success, :payment, :expected_ticket_ids, :payment_reference
 
   # rescue_from(ChargeSetupValidityException) do |exception|
   #   # PaymentMailer.notify_failure(exception).deliver_later
@@ -18,7 +18,8 @@ class PurchasesCart
     @expected_ticket_ids = expected_ticket_ids.split(" ").map(&:to_i).sort
     @payment_reference = payment_reference || Payment.generate_reference
     @discount_code = discount_code
-    @discount_code_obj = DiscountCode.find_by_code(discount_code) if discount_code
+    @shopping_cart = ShoppingCart.find_by_user_id user.id
+    @discount_code_obj = @shopping_cart.discount_code if @shopping_cart.discount_code_id
   end
 
   def run
@@ -40,8 +41,8 @@ class PurchasesCart
   end
 
   def pre_purchase_valid?
-    actual_price = if discount_code
-      PriceCalculator.new(tickets, @discount_code_obj).total_price.to_i
+    actual_price = if @shopping_cart.discount_code_id
+      @shopping_cart.total_cost.to_i
     else
       tickets.map(&:price).map(&:to_i).sum
     end
@@ -69,6 +70,7 @@ class PurchasesCart
     ) unless pre_purchase_valid?
     update_tickets
     create_payment
+    clear_cart
     @continue = true
   end
 
@@ -85,10 +87,20 @@ class PurchasesCart
   def payment_attributes
     attrs = {user_id: user.id, price: purchase_amount.to_i,
       status: "created", reference: Payment.generate_reference,
-      discount_code: @discount_code_obj
+      discount_code: @discount_code_obj, partials: price_calculator.breakdown,
+      shipping_method: @shopping_cart.shipping_method,
+      shipping_address: @shopping_cart.address
     }
-    attrs.merge!(discount: PriceCalculator.new(tickets, @discount_code_obj).discount.to_i) if discount_code
+    attrs.merge!(discount: PriceCalculator.new(tickets, @discount_code_obj).discount.to_i) if @shopping_cart.discount_code_id
     attrs
+  end
+
+  def price_calculator
+    @price_calculator ||= PriceCalculator.new(tickets, @discount_code_obj, @shopping_cart.shipping_method, address: @shopping_cart.address, user: user, tax_id: "cart_#{@shopping_cart.id}")
+  end
+
+  def clear_cart
+    @shopping_cart.destroy
   end
 
   def success?

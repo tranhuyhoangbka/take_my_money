@@ -1,17 +1,17 @@
 h3 Payment Options
 
-= simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal" do |f|
-
-  .row
-    .form-group
+.row
+  .form-group
+    = form_tag discount_codes_path, id: "discount-code-form" do 
       .col-sm-2
         = label_tag(:discount_code, "Discount Code", class: "control-label")
       .col-sm-2
-        input.form-control.valid-field(name="discount_code" id="discount_code")
+        = text_field_tag :discount_code, @cart.discount_code&.code, id: "discount_code"
       .col-sm-3
         = submit_tag("Apply Code", class: "btn btn-primary", id: "apply_code")
         = hidden_field_tag(:active_discount_code, "")
 
+= simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal" do |f|
 = simple_form_for :payment, url: payments_path, class: "credit-card-form form-horizontal", html: {id: "payment-form"} do |f|
 
   - if current_user.admin?

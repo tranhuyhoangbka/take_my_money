@@ -28,3 +28,14 @@ table.table.table-stripped
         td= link_to "Change plan", edit_subscription_path(subscription), remote: true, class: "btn btn-default" unless subscription.canceled?
 
 #modal-container
+
+h3 Affiliate
+
+- if current_user.affiliates.empty?
+  = link_to "Make me an affiliate", new_affiliate_path
+- else
+  h4 Affiliate Tags
+
+  ul
+    - current_user.affiliates.each do |affiliate|
+      li= link_to(affiliate.tag, root_path(tag: affiliate.tag))
