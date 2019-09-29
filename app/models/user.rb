@@ -31,6 +31,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :tickets, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+  has_one :shopping_cart
+  has_many :affiliates
 
   attr_accessor :cellphone_number
 

@@ -4,6 +4,10 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  resources :discount_codes
+  resources :shipping_details
+  resources :affiliates
+
   devise_scope :user do
     post "users/sessions/verify" => "Users::SessionsController"
   end

@@ -1,4 +1,7 @@
 - provide(:title, "Shopping Cart")
+- if @cart.price_calculator.sales_tax.nonzero?
+  h4.active_code
+    | Sale Tax: #{@cart.price_calculator.sales_tax}
 - @cart.events.each do |event|
   h2= event.name
   div id=dom_id(event)
@@ -17,6 +20,12 @@
 h3 Total #{@cart.total_cost}
 
 - if @cart.tickets.any?
+  h2 Address
+  - unless @cart.address
+    = link_to "Enter Shipping Details Here", new_shipping_detail_path 
+  - else
+    p Address 1: #{@cart.address.address_1}
+    p City: #{@cart.address.city}
   h2 Checkout
 
   = render "credit_card_info"

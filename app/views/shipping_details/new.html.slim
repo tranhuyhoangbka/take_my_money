@@ -1,0 +1,36 @@
+h2 Address
+
+= form_for @address, url: shipping_details_path do |f|
+  .row
+    .form-group
+      .col-sm-2
+        = f.label(:address_1, class: "control-label")
+      .col-sm-6
+        = f.text_field :address_1, class: "form-control"
+  .row
+    .form-group
+      .col-sm-2
+        = f.label(:city, class: "control-label")
+      .col-sm-6
+        = f.text_field :city, class: "form-control"
+
+  .row
+    .form-group
+      .col-sm-2
+        = f.label(:state, class: "control-label")
+      .col-sm-6
+        = f.text_field :state, class: "form-control"
+  .row
+    .form-group
+      .col-sm-2
+        = f.label(:zip, class: "control-label")
+      .col-sm-6
+        = f.text_field :zip, class: "form-control"
+  .row
+    .form-group
+      .col-sm-2
+        = label_tag(:shipping_method, "", class: "control-label")
+      .col-sm-6
+        = select_tag :shipping_method, options_for_select(["electronic", "standard", "overnight"]), class: "form-control"
+  .row
+    = button_tag "Add"
