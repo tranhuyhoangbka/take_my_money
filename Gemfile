@@ -73,7 +73,7 @@ group :development do
   gem "listen", ">= 3.0.5"
   gem "net-ssh", ">= 5.0.0", require: false
   gem "overcommit", ">= 0.37.0", require: false
-  gem "puma", "~> 3.11"
+  gem "puma", "~> 5.5"
   gem "rack-livereload"
   gem "rubocop", ">= 0.67.2", require: false
   gem "rubocop-performance", require: false
